@@ -1,0 +1,43 @@
+{
+    "name": "codersstudio/dadataapi",
+    "description": ":description",
+    "license": "license",
+    "authors": [
+        {
+            "name": "CodersStudio",
+            "email": "info@coders.studio",
+            "homepage": "https://coders.studio"
+        }
+    ],
+    "homepage": "https://github.com/codersstudio/dadataapi",
+    "keywords": ["Laravel", "DadataApi"],
+    "require": {
+        "illuminate/support": "~5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3.0",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "CodersStudio\\DadataApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CodersStudio\\DadataApi\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CodersStudio\\DadataApi\\DadataApiServiceProvider"
+            ],
+            "aliases": {
+                "DadataApi": "CodersStudio\\DadataApi\\Facades\\DadataApi"
+            }
+        }
+    }
+}
