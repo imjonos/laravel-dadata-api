@@ -24,6 +24,7 @@ class DadataApi extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'DadataApi';
+        
+        return 'dadataapi';
     }
 }
