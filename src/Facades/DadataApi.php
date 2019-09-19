@@ -5,6 +5,12 @@
  *  info@coders.studio
  */
 
+/**
+ * CodersStudio 2019
+ *  https://coders.studio
+ *  info@coders.studio
+ */
+
 namespace CodersStudio\DadataApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
