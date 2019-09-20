@@ -20,14 +20,20 @@ class DadataApi
     /**
      * Return cities suggestions
      * @param string $query
+     * @param array $countryCodeISO ["RU", "BY"]
      * @return array
      */
-    public function suggestCity(string $query):array
+    public function suggestCity(String $query = "", Array $countryCodeISO = ["*"]):array
     {
+        $countries = array_map (function ($item){
+           return  ["country_iso_code" => $item];
+        }, $countryCodeISO);
+
         $data = [
             "query" => $query,
             "from_bound" => ["value" => "city"],
-            "to_bound" => ["value" => "city"]
+            "to_bound" => ["value" => "city"],
+            "locations"=> $countries
         ];
         return $this->getSuggest()->suggest("address", $data);
     }
@@ -42,7 +48,8 @@ class DadataApi
         $data = [
             "query" => $query,
             "from_bound" => ["value" => "country"],
-            "to_bound" => ["value" => "country"]
+            "to_bound" => ["value" => "country"],
+            "locations"=> ["country_iso_code" => "*"]
         ];
         return $this->getSuggest()->suggest("address", $data);
     }
