@@ -68,6 +68,19 @@ class DadataApi
     }
 
     /**
+     * Return city id for courier service (СДЭК, Boxberry, DPD)
+     * @param string $kladrId
+     * @return array
+     */
+    public function suggestDeliveryId(string $kladrId):array
+    {
+        $data = [
+            "query" => $kladrId
+        ];
+        return $this->getSuggest()->findById("delivery", $data);
+    }
+
+    /**
      * Get the Suggestions instance
      * @return Suggestions
      */
