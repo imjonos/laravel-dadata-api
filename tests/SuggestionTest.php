@@ -32,6 +32,24 @@ class SuggestionTest extends TestCase
     }
 
     /**
+     * Test for suggest street method
+     */
+    public function testStreet()
+    {
+        $result = DadataApi::suggestStreet("Мира", "Москва");
+        $this->assertSuggestion($result, "г Москва, пр-кт Мира", 10);
+    }
+
+    /**
+     * Test for suggest house method
+     */
+    public function testHouse()
+    {
+        $result = DadataApi::suggestHouse("1", "6df62ddd-df70-4cd2-9a44-04ed037368d8");
+        $this->assertSuggestion($result, "г Москва, ул Мира, д 1", 10);
+    }
+
+    /**
      * Test for suggest city id method findById/delivery
      */
     public function testDeliveryId()

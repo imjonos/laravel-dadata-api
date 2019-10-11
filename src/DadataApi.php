@@ -23,9 +23,10 @@ class DadataApi
      * Return cities suggestions
      * @param string $query
      * @param array $countryCodeISO ["RU", "BY"]
+     * @param int $count
      * @return array
      */
-    public function suggestCity(string $query = "", array $countryCodeISO = ["*"]):array
+    public function suggestCity(string $query = "", array $countryCodeISO = ["*"], int $count = 10):array
     {
         $countries = array_map (function ($item){
            return  ["country_iso_code" => $item];
@@ -35,10 +36,51 @@ class DadataApi
             "query" => $query,
             "from_bound" => ["value" => "city"],
             "to_bound" => ["value" => "city"],
-            "locations"=> $countries
+            "locations"=> $countries,
+            "count" => $count
         ];
         return $this->getSuggest()->suggest("address", $data);
     }
+
+    /**
+     * Return street suggestions
+     * @param string $query
+     * @param string $region
+     * @param int $count
+     * @return array
+     */
+    public function suggestStreet(string $query = "", string $region = "", int $count = 10):array
+    {
+
+        $data = [
+            "query" => $query,
+            "from_bound" => ["value" => "street"],
+            "to_bound" => ["value" => "street"],
+            "locations"=> [[ "region" => $region]],
+            "count" => $count
+        ];
+        return $this->getSuggest()->suggest("address", $data);
+    }
+
+    /**
+     * Return house suggestions
+     * @param string $query
+     * @param string $street_fias_id
+     * @param int $count
+     * @return array
+     */
+    public function suggestHouse(string $query = "", string $street_fias_id = "", int $count = 10):array
+    {
+        $data = [
+            "query" => $query,
+            "from_bound" => ["value" => "house"],
+            "to_bound" => ["value" => "house"],
+            "locations" => [[ "street_fias_id" => $street_fias_id]],
+            "count" => $count
+        ];
+        return $this->getSuggest()->suggest("address", $data);
+    }
+
 
     /**
      * Clean address
@@ -54,15 +96,17 @@ class DadataApi
     /**
      * Return countries suggestions
      * @param string $query
+     * @param int $count
      * @return array
      */
-    public function suggestCountry(string $query):array
+    public function suggestCountry(string $query, int $count = 10):array
     {
         $data = [
             "query" => $query,
             "from_bound" => ["value" => "country"],
             "to_bound" => ["value" => "country"],
-            "locations"=> ["country_iso_code" => "*"]
+            "locations"=> ["country_iso_code" => "*"],
+            "count" => $count
         ];
         return $this->getSuggest()->suggest("address", $data);
     }
