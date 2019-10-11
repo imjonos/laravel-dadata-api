@@ -32,6 +32,18 @@ class SuggestionTest extends TestCase
     }
 
     /**
+     * Test clean address
+     */
+    public function testCleanAddress()
+    {
+        $result = DadataApi::cleanAddress("Ставрополь Мира 123");
+        $this->assertEquals(true, is_array($result));
+        $this->assertEquals(1, count($result));
+        $this->assertArrayHasKey('result', $result[0]);
+        $this->assertEquals("г Ставрополь, ул Мира, д 123", $result[0]['result']);
+    }
+
+    /**
      * Test for suggest city id method findById/delivery
      */
     public function testDeliveryId()

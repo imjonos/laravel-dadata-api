@@ -7,6 +7,7 @@
 
 namespace CodersStudio\DadataApi;
 
+use CodersStudio\DadataApi\Classes\Clean;
 use CodersStudio\DadataApi\Classes\Suggestions;
 
 /**
@@ -16,6 +17,7 @@ use CodersStudio\DadataApi\Classes\Suggestions;
 class DadataApi
 {
     protected $suggest;
+    protected $clean;
 
     /**
      * Return cities suggestions
@@ -23,7 +25,7 @@ class DadataApi
      * @param array $countryCodeISO ["RU", "BY"]
      * @return array
      */
-    public function suggestCity(String $query = "", Array $countryCodeISO = ["*"]):array
+    public function suggestCity(string $query = "", array $countryCodeISO = ["*"]):array
     {
         $countries = array_map (function ($item){
            return  ["country_iso_code" => $item];
@@ -36,6 +38,17 @@ class DadataApi
             "locations"=> $countries
         ];
         return $this->getSuggest()->suggest("address", $data);
+    }
+
+    /**
+     * Clean address
+     * @param string $address
+     * @return array
+     */
+    public function cleanAddress(string $address):array
+    {
+        $result = $this->getClean()->clean("address", $address);
+        return $result;
     }
 
     /**
@@ -69,6 +82,21 @@ class DadataApi
 
     /**
      * Return city id for courier service (СДЭК, Boxberry, DPD)
+     * {
+     *       "suggestions": [
+     *           {
+     *               "value": "3100400100000",
+     *               "unrestricted_value": "fe7eea4a-875a-4235-aa61-81c2a37a0440",
+     *               "data": {
+     *                   "kladr_id": "3100400100000",
+     *                   "fias_id": "fe7eea4a-875a-4235-aa61-81c2a37a0440",
+     *                   "boxberry_id": "01929",
+     *                   "cdek_id": "344",
+     *                   "dpd_id": "196006461"
+     *               }
+     *           }
+     *       ]
+     *   }
      * @param string $kladrId
      * @return array
      */
@@ -91,5 +119,18 @@ class DadataApi
             $this->suggest->init();
         }
         return $this->suggest;
+    }
+
+    /**
+     * Get the Clean instance
+     * @return Suggestions
+     */
+    private function getClean(): Clean
+    {
+        if (!$this->clean) {
+            $this->clean = new Clean(config("dadataapi.token", ""), config("dadataapi.secret", ""));
+            $this->clean->init();
+        }
+        return $this->clean;
     }
 }

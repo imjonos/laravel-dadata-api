@@ -6,5 +6,6 @@
  */
 
 return [
-    'token' => env("DADATA_TOKEN", "")
+    'token' => env("DADATA_TOKEN", ""),
+    'secret' => env('DADATA_SECRET', "")
 ];
