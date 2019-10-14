@@ -19,7 +19,7 @@ class SuggestionTest extends TestCase
     public function testCities()
     {
         $result = DadataApi::suggestCity("Москва");
-        $this->assertSuggestion($result, "Россия, г Москва", 3);
+        $this->assertSuggestion($result, "Россия, г Москва", 10);
     }
 
     /**
