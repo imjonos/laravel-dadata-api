@@ -35,7 +35,7 @@ class DadataApi
         $data = [
             "query" => $query,
             "from_bound" => ["value" => "city"],
-            "to_bound" => ["value" => "city"],
+            "to_bound" => ["value" => "settlement"],
             "locations"=> $countries,
             "count" => $count
         ];
