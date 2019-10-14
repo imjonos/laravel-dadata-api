@@ -52,7 +52,7 @@ class DadataApi
         $dataCity = $this->getSuggest()->suggest("address",  $dataCityQuery);
         $data = array_merge($dataCity, $dataSettlement);
 
-        return $data;
+        return $dataCity;
     }
 
     /**
