@@ -32,27 +32,15 @@ class DadataApi
            return  ["country_iso_code" => $item];
         }, $countryCodeISO);
 
-        $dataSettlementQuery = [
+        $data = [
             "query" => $query,
-            "from_bound" => ["value" => "settlement"],
-            "to_bound" => ["value" => "settlement"],
+            "from_bound" => ["value" => "city-settlement"],
+            "to_bound" => ["value" => "city-settlement"],
             "locations"=> $countries,
             "count" => $count
         ];
 
-        $dataCityQuery = [
-            "query" => $query,
-            "from_bound" => ["value" => "settlement"],
-            "to_bound" => ["value" => "settlement"],
-            "locations"=> $countries,
-            "count" => $count
-        ];
-
-        $dataSettlement = $this->getSuggest()->suggest("address",  $dataSettlementQuery);
-        $dataCity = $this->getSuggest()->suggest("address",  $dataCityQuery);
-        $data = array_merge($dataCity, $dataSettlement);
-
-        return $dataCity;
+        return $this->getSuggest()->suggest("address",  $data);
     }
 
     /**
