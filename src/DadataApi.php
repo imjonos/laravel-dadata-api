@@ -152,6 +152,20 @@ class DadataApi
         ];
         return $this->getSuggest()->findById("delivery", $data);
     }
+    
+    /**
+     *Suggest address by fias Id
+     * @param string $fiasId
+     * @return array
+     */
+    public function suggestAddressById(string $fiasId):array
+    {
+        $data = [
+            "query" => $fiasId
+        ];
+        return $this->getSuggest()->findById("address", $data);
+    }
+
 
     /**
      * Get the Suggestions instance
