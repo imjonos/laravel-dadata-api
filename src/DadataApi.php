@@ -50,14 +50,14 @@ class DadataApi
      * @param int $count
      * @return array
      */
-    public function suggestStreet(string $query = "", string $region = "", int $count = 10):array
+    public function suggestStreet(string $query = "", string $fiasId = "", int $count = 10):array
     {
 
         $data = [
             "query" => $query,
             "from_bound" => ["value" => "street"],
             "to_bound" => ["value" => "street"],
-            "locations"=> [[ "region" => $region]],
+            "locations"=> [[ "city_fias_id" => $fiasId], [ "settlement_fias_id" => $fiasId]],
             "count" => $count
         ];
         return $this->getSuggest()->suggest("address", $data);
