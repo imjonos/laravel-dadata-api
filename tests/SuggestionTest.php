@@ -36,7 +36,7 @@ class SuggestionTest extends TestCase
      */
     public function testStreet()
     {
-        $result = DadataApi::suggestStreet("Мира", "Москва");
+        $result = DadataApi::suggestStreet("Мира", "0c5b2444-70a0-4932-980c-b4dc0d3f02b5");
         $this->assertSuggestion($result, "г Москва, пр-кт Мира", 10);
     }
 
@@ -57,6 +57,34 @@ class SuggestionTest extends TestCase
         $result = DadataApi::suggestDeliveryId(/*kladr_id*/ "3100400100000");
         $this->assertSuggestion($result, "3100400100000");
     }
+
+    /**
+     * Test for suggest address by Id
+     */
+    public function testAddressById()
+    {
+        $result = DadataApi::suggestAddressById("6df62ddd-df70-4cd2-9a44-04ed037368d8");
+        $this->assertSuggestion($result, "г Москва, ул Мира");
+    }
+
+    /**
+     * Test for suggest bank information
+     */
+    public function testBank()
+    {
+        $result = DadataApi::suggestBank("сбербанк");
+        $this->assertSuggestion($result, "СБЕРБАНК РОССИИ", 10);
+    }
+
+    /**
+     * Test for suggest bank information
+     */
+    public function testCompany()
+    {
+        $result = DadataApi::suggestCompany("7707083893");
+        $this->assertSuggestion($result, "ПАО СБЕРБАНК", 10);
+    }
+
 
     /**
      * Assert Suggestion result

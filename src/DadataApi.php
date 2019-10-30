@@ -126,6 +126,19 @@ class DadataApi
     }
 
     /**
+     * Return bank suggestions
+     * @param string $query
+     * @return array
+     */
+    public function suggestBank(string $query):array
+    {
+        $data = [
+            "query" => $query
+        ];
+        return $this->getSuggest()->suggest("bank", $data);
+    }
+
+    /**
      * Return city id for courier service (СДЭК, Boxberry, DPD)
      * {
      *       "suggestions": [
@@ -152,7 +165,7 @@ class DadataApi
         ];
         return $this->getSuggest()->findById("delivery", $data);
     }
-    
+
     /**
      *Suggest address by fias Id
      * @param string $fiasId
@@ -164,6 +177,19 @@ class DadataApi
             "query" => $fiasId
         ];
         return $this->getSuggest()->findById("address", $data);
+    }
+
+    /**
+     * Suggest company by inn
+     * @param string $inn
+     * @return array
+     */
+    public function suggestCompany(string $inn):array
+    {
+        $data = [
+            "query" => $inn
+        ];
+        return $this->getSuggest()->findById("party", $data);
     }
 
 
