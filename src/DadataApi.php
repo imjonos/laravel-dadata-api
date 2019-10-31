@@ -95,6 +95,17 @@ class DadataApi
     }
 
     /**
+     * Clean phone number
+     * @param string $address
+     * @return array
+     */
+    public function cleanPhone(string $phone):array
+    {
+        $result = $this->getClean()->clean("phone", $phone);
+        return $result;
+    }
+
+    /**
      * Return countries suggestions
      * @param string $query
      * @param int $count
