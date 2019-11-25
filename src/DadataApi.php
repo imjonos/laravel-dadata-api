@@ -117,7 +117,9 @@ class DadataApi
             "query" => $query,
             "from_bound" => ["value" => "country"],
             "to_bound" => ["value" => "country"],
-            "locations"=> ["country_iso_code" => "*"],
+            "locations"=> [
+                ["country_iso_code" => "*"]
+            ],
             "count" => $count
         ];
         return $this->getSuggest()->suggest("address", $data);
