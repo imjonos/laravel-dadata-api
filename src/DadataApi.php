@@ -128,13 +128,20 @@ class DadataApi
     /**
      * Return addresses suggestions
      * @param string $query
+     * @param string $fiasId
      * @return array
      */
-    public function suggestAddress(string $query):array
+    public function suggestAddress(string $query, ?string $fiasId = null):array
     {
         $data = [
             "query" => $query
         ];
+        if ($fiasId) {
+            $data["locations"] = [
+                [ "city_fias_id" => $fiasId],
+                [ "settlement_fias_id" => $fiasId]
+            ];
+        }
         return $this->getSuggest()->suggest("address", $data);
     }
 
