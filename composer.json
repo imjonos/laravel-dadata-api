@@ -1,7 +1,7 @@
 {
     "name": "codersstudio/dadata-api",
-    "description": ":description",
-    "license": "license",
+    "description": "Laravel Dadata API",
+    "license": "MIT",
     "authors": [
         {
             "name": "CodersStudio",
@@ -9,7 +9,7 @@
             "homepage": "https://coders.studio"
         }
     ],
-    "homepage": "https://github.com/codersstudio/dadataapi",
+    "homepage": "https://github.com/imjonos/laravel-dadata-api",
     "keywords": ["Laravel", "DadataApi"],
     "require": {
         "illuminate/support": "~5"
