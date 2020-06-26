@@ -39,8 +39,8 @@ class DadataApi
             "locations"=> $countries,
             "count" => $count
         ];
-
-        return $this->getSuggest()->suggest("address",  $data);
+        $result = $this->getSuggest()->suggest("address",  $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -60,7 +60,8 @@ class DadataApi
             "locations"=> [[ "city_fias_id" => $fiasId], [ "settlement_fias_id" => $fiasId]],
             "count" => $count
         ];
-        return $this->getSuggest()->suggest("address", $data);
+        $result = $this->getSuggest()->suggest("address", $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -79,7 +80,8 @@ class DadataApi
             "locations" => [[ "street_fias_id" => $street_fias_id]],
             "count" => $count
         ];
-        return $this->getSuggest()->suggest("address", $data);
+        $result = $this->getSuggest()->suggest("address",  $data);
+        return ($result)?$result:[];
     }
 
 
@@ -122,7 +124,8 @@ class DadataApi
             ],
             "count" => $count
         ];
-        return $this->getSuggest()->suggest("address", $data);
+        $result = $this->getSuggest()->suggest("address",  $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -142,7 +145,8 @@ class DadataApi
                 [ "settlement_fias_id" => $fiasId]
             ];
         }
-        return $this->getSuggest()->suggest("address", $data);
+        $result = $this->getSuggest()->suggest("address",  $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -155,7 +159,8 @@ class DadataApi
         $data = [
             "query" => $query
         ];
-        return $this->getSuggest()->suggest("bank", $data);
+        $result = $this->getSuggest()->suggest("bank",  $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -183,7 +188,9 @@ class DadataApi
         $data = [
             "query" => $kladrId
         ];
-        return $this->getSuggest()->findById("delivery", $data);
+        
+        $result = $this->getSuggest()->findById("delivery", $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -196,7 +203,8 @@ class DadataApi
         $data = [
             "query" => $fiasId
         ];
-        return $this->getSuggest()->findById("address", $data);
+        $result = $this->getSuggest()->findById("address", $data);
+        return ($result)?$result:[];
     }
 
     /**
@@ -209,7 +217,8 @@ class DadataApi
         $data = [
             "query" => $inn
         ];
-        return $this->getSuggest()->findById("party", $data);
+        $result = $this->getSuggest()->findById("party", $data);
+        return ($result)?$result:[];
     }
 
 
