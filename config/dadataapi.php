@@ -1,11 +1,8 @@
 <?php
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
+
+declare(strict_types=1);
 
 return [
-    'token' => env("DADATA_TOKEN", ""),
-    'secret' => env('DADATA_SECRET', "")
+    'token' => env('DADATA_TOKEN', ''),
+    'secret' => env('DADATA_SECRET', ''),
 ];

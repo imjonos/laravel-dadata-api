@@ -1,100 +1,99 @@
 <?php
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
 
-namespace CodersStudio\DadataApi\Classes;
+declare(strict_types=1);
 
-/**
- * Class Suggestions
- * Source: https://gist.github.com/nalgeon/affa3f9fc7b665ab7744573455abe18d
- */
-class Suggestions
+namespace Nos\DadataApi\Classes;
+
+final class Suggestions
 {
-    private $base_url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs";
-    private $token;
-    private $handle;
+    private const BASE_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs';
 
-    function __construct($token)
+    private string $token;
+    /** @var resource|\CurlHandle */
+    private mixed $handle;
+
+    public function __construct(string $token)
     {
         $this->token = $token;
     }
 
-    public function init()
+    public function init(): void
     {
         $this->handle = curl_init();
-        curl_setopt($this->handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->handle, CURLOPT_HTTPHEADER, array(
-            "Content-Type: application/json",
-            "Accept: application/json",
-            "Authorization: Token " . $this->token
-        ));
-        curl_setopt($this->handle, CURLOPT_POST, 1);
+        curl_setopt_array($this->handle, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Token ' . $this->token,
+            ],
+            CURLOPT_POST => true,
+        ]);
     }
 
     /**
-     * See https://dadata.ru/api/outward/ for details.
+     * @param array<string, string> $fields
+     * @return array<string, mixed>
      */
-    public function findById($type, $fields)
+    public function findById(string $type, array $fields): array
     {
-        $url = $this->base_url . "/findById/$type";
+        $url = self::BASE_URL . "/findById/$type";
         return $this->executeRequest($url, $fields);
     }
 
     /**
-     * See https://dadata.ru/api/geolocate/ for details.
+     * @return array<string, mixed>
      */
-    public function geolocate($lat, $lon, $count = 10, $radius_meters = 100)
+    public function geolocate(float $lat, float $lon, int $count = 10, int $radiusMeters = 100): array
     {
-        $url = $this->base_url . "/geolocate/address";
-        $fields = array(
-            "lat" => $lat,
-            "lon" => $lon,
-            "count" => $count,
-            "radius_meters" => $radius_meters
-        );
+        $url = self::BASE_URL . '/geolocate/address';
+        $fields = [
+            'lat' => (string) $lat,
+            'lon' => (string) $lon,
+            'count' => (string) $count,
+            'radius_meters' => (string) $radiusMeters,
+        ];
         return $this->executeRequest($url, $fields);
     }
 
     /**
-     * See https://dadata.ru/api/iplocate/ for details.
+     * @return array<string, mixed>
      */
-    public function iplocate($ip)
+    public function iplocate(string $ip): array
     {
-        $url = $this->base_url . "/iplocate/address?ip=" . $ip;
-        return $this->executeRequest($url, $fields = null);
+        $url = self::BASE_URL . '/iplocate/address?ip=' . $ip;
+        return $this->executeRequest($url, null);
     }
 
     /**
-     * See https://dadata.ru/api/suggest/ for details.
+     * @param array<string, mixed> $fields
+     * @return array<string, mixed>
      */
-    public function suggest($type, $fields)
+    public function suggest(string $type, array $fields): array
     {
-        $url = $this->base_url . "/suggest/$type";
+        $url = self::BASE_URL . "/suggest/$type";
         return $this->executeRequest($url, $fields);
     }
 
-    public function close()
+    public function close(): void
     {
         curl_close($this->handle);
     }
 
-    private function executeRequest($url, $fields)
+    /**
+     * @param array<string, mixed>|null $fields
+     * @return array<string, mixed>
+     */
+    private function executeRequest(string $url, mixed $fields): array
     {
         curl_setopt($this->handle, CURLOPT_URL, $url);
-        if ($fields != null) {
-            curl_setopt($this->handle, CURLOPT_POST, 1);
-            curl_setopt($this->handle, CURLOPT_POSTFIELDS, json_encode($fields));
+        if ($fields !== null) {
+            curl_setopt($this->handle, CURLOPT_POST, true);
+            curl_setopt($this->handle, CURLOPT_POSTFIELDS, json_encode($fields, JSON_THROW_ON_ERROR));
         } else {
-            curl_setopt($this->handle, CURLOPT_POST, 0);
+            curl_setopt($this->handle, CURLOPT_POST, false);
         }
         $result = curl_exec($this->handle);
-        $result = json_decode($result, true);
-        return $result;
+        return json_decode($result, true, 512, JSON_THROW_ON_ERROR);
     }
 }
-
-
-

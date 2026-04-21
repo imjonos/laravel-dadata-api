@@ -1,43 +1,61 @@
 {
-    "name": "codersstudio/dadata-api",
-    "description": "Laravel Dadata API",
+    "name": "imjonos/laravel-dadata-api",
+    "description": "Laravel package for Dadata API - address suggestions, cleaning, company and bank data lookup",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "CodersStudio",
-            "email": "info@coders.studio",
-            "homepage": "https://coders.studio"
+            "name": "Eugeny Nosenko",
+            "email": "info@toprorgram.ru",
+            "homepage": "https://toprorgram.ru"
         }
     ],
     "homepage": "https://github.com/imjonos/laravel-dadata-api",
-    "keywords": ["Laravel", "DadataApi"],
+    "docs": "https://github.com/imjonos/laravel-dadata-api#readme",
+    "repository": "https://github.com/imjonos/laravel-dadata-api",
+    "issues": "https://github.com/imjonos/laravel-dadata-api/issues",
+    "keywords": [
+        "Laravel",
+        "Dadata",
+        "DadataApi",
+        "address",
+        "suggestions",
+        "cleaning",
+        "company",
+        "bank",
+        "inn",
+        "fias"
+    ],
     "require": {
-        "illuminate/support": "~5"
+        "php": "^8.3",
+        "illuminate/support": "^12.0",
+        "imjonos/laravel-base-dto": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~7.0",
-        "mockery/mockery": "^1.1",
-        "orchestra/testbench": "~3.0",
-        "sempro/phpunit-pretty-print": "^1.0"
+        "phpunit/phpunit": "^11.0",
+        "mockery/mockery": "^1.6",
+        "orchestra/testbench": "^9.0"
     },
     "autoload": {
         "psr-4": {
-            "CodersStudio\\DadataApi\\": "src/"
+            "Nos\\DadataApi\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "CodersStudio\\DadataApi\\Tests\\": "tests"
+            "Tests\\": "tests/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "CodersStudio\\DadataApi\\DadataApiServiceProvider"
+                "Nos\\DadataApi\\DadataApiServiceProvider"
             ],
             "aliases": {
-                "DadataApi": "CodersStudio\\DadataApi\\Facades\\DadataApi"
+                "DadataApi": "Nos\\DadataApi\\Facades\\DadataApi"
             }
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

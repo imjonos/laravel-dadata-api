@@ -1,68 +1,77 @@
 <?php
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
 
-namespace CodersStudio\DadataApi\Classes;
+declare(strict_types=1);
 
-class Clean
+namespace Nos\DadataApi\Classes;
+
+final class Clean
 {
-    private $base_url = "https://dadata.ru/api/v2/clean";
-    private $token;
-    private $secret;
-    private $handle;
+    private const BASE_URL = 'https://dadata.ru/api/v2/clean';
 
-    public function __construct($token, $secret)
+    private string $token;
+    private string $secret;
+    /** @var resource|\CurlHandle */
+    private mixed $handle;
+
+    public function __construct(string $token, string $secret)
     {
         $this->token = $token;
         $this->secret = $secret;
     }
 
-    public function init()
+    public function init(): void
     {
         $this->handle = curl_init();
-        curl_setopt($this->handle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->handle, CURLOPT_HTTPHEADER, array(
-            "Content-Type: application/json",
-            "Accept: application/json",
-            "Authorization: Token " . $this->token,
-            "X-Secret: " . $this->secret,
-        ));
-        curl_setopt($this->handle, CURLOPT_POST, 1);
+        curl_setopt_array($this->handle, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Authorization: Token ' . $this->token,
+                'X-Secret: ' . $this->secret,
+            ],
+            CURLOPT_POST => true,
+        ]);
     }
 
-    public function clean($type, $value)
+    /**
+     * @return array<string, mixed>
+     */
+    public function clean(string $type, string $value): array
     {
-        $url = $this->base_url . "/$type";
-        $fields = array($value);
+        $url = self::BASE_URL . "/$type";
+        $fields = [$value];
         return $this->executeRequest($url, $fields);
     }
 
-    public function cleanRecord($structure, $record)
+    /**
+     * @return array<string, mixed>
+     */
+    public function cleanRecord(string $structure, array $record): array
     {
-        $url = $this->base_url;
-        $fields = array(
-            "structure" => $structure,
-            "data" => array($record)
-        );
+        $url = self::BASE_URL;
+        $fields = [
+            'structure' => $structure,
+            'data' => [$record],
+        ];
         return $this->executeRequest($url, $fields);
     }
 
-    public function close()
+    public function close(): void
     {
         curl_close($this->handle);
     }
 
-    private function executeRequest($url, $fields)
+    /**
+     * @return array<string, mixed>
+     */
+    private function executeRequest(string $url, mixed $fields): array
     {
-        curl_setopt($this->handle, CURLOPT_URL, $url);
-        curl_setopt($this->handle, CURLOPT_POSTFIELDS, json_encode($fields));
+        curl_setopt_array($this->handle, [
+            CURLOPT_URL => $url,
+            CURLOPT_POSTFIELDS => json_encode($fields, JSON_THROW_ON_ERROR),
+        ]);
         $result = curl_exec($this->handle);
-        $result = json_decode($result, true);
-        return $result;
+        return json_decode($result, true, 512, JSON_THROW_ON_ERROR);
     }
 }
-
-

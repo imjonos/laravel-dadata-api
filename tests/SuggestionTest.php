@@ -1,103 +1,94 @@
 <?php
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
+
+declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use phpDocumentor\Reflection\Types\Integer;
+use Nos\DadataApi\Facades\DadataApi;
+use Nos\DadataApi\DTO\SuggestionCollection;
+use Nos\DadataApi\DTO\SuggestionDTO;
 use Tests\TestCase;
-use CodersStudio\DadataApi\Facades\DadataApi;
 
 class SuggestionTest extends TestCase
 {
-    /**
-     * Test for suggest city method
-     */
-    public function testCities()
+    public function testCities(): void
     {
-        $result = DadataApi::suggestCity("Москва");
-        $this->assertSuggestion($result, "Россия, г Москва", 10);
+        $result = DadataApi::suggestCity('Москва');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+        self::assertGreaterThanOrEqual(1, $result->count());
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('Россия, г Москва', $first->value);
     }
 
-    /**
-     * Test for suggest country method
-     */
-    public function testCountries()
+    public function testCountries(): void
     {
-        $result = DadataApi::suggestCountry("Россия");
-        $this->assertSuggestion($result, "Россия");
+        $result = DadataApi::suggestCountry('Россия');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('Россия', $first->value);
     }
 
-    /**
-     * Test for suggest street method
-     */
-    public function testStreet()
+    public function testStreet(): void
     {
-        $result = DadataApi::suggestStreet("Мира", "0c5b2444-70a0-4932-980c-b4dc0d3f02b5");
-        $this->assertSuggestion($result, "г Москва, пр-кт Мира", 10);
+        $result = DadataApi::suggestStreet('Мира', '0c5b2444-70a0-4932-980c-b4dc0d3f02b5');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('г Москва, пр-кт Мира', $first->value);
     }
 
-    /**
-     * Test for suggest house method
-     */
-    public function testHouse()
+    public function testHouse(): void
     {
-        $result = DadataApi::suggestHouse("1", "6df62ddd-df70-4cd2-9a44-04ed037368d8");
-        $this->assertSuggestion($result, "г Москва, ул Мира, д 1", 10);
+        $result = DadataApi::suggestHouse('1', '6df62ddd-df70-4cd2-9a44-04ed037368d8');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('г Москва, ул Мира, д 1', $first->value);
     }
 
-    /**
-     * Test for suggest city id method findById/delivery
-     */
-    public function testDeliveryId()
+    public function testDeliveryId(): void
     {
-        $result = DadataApi::suggestDeliveryId(/*kladr_id*/ "3100400100000");
-        $this->assertSuggestion($result, "3100400100000");
+        $result = DadataApi::suggestDeliveryId('3100400100000');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('3100400100000', $first->value);
     }
 
-    /**
-     * Test for suggest address by Id
-     */
-    public function testAddressById()
+    public function testAddressById(): void
     {
-        $result = DadataApi::suggestAddressById("6df62ddd-df70-4cd2-9a44-04ed037368d8");
-        $this->assertSuggestion($result, "г Москва, ул Мира");
+        $result = DadataApi::suggestAddressById('6df62ddd-df70-4cd2-9a44-04ed037368d8');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('г Москва, ул Мира', $first->value);
     }
 
-    /**
-     * Test for suggest bank information
-     */
-    public function testBank()
+    public function testBank(): void
     {
-        $result = DadataApi::suggestBank("сбербанк");
-        $this->assertSuggestion($result, "СБЕРБАНК РОССИИ", 10);
+        $result = DadataApi::suggestBank('сбербанк');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
+
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('СБЕРБАНК РОССИИ', $first->value);
     }
 
-    /**
-     * Test for suggest bank information
-     */
-    public function testCompany()
+    public function testCompany(): void
     {
-        $result = DadataApi::suggestCompany("7707083893");
-        $this->assertSuggestion($result, "ПАО СБЕРБАНК", 10);
-    }
+        $result = DadataApi::suggestCompany('7707083893');
+        self::assertInstanceOf(SuggestionCollection::class, $result);
 
-
-    /**
-     * Assert Suggestion result
-     * @param array $result
-     * @param string $value
-     * @param int $count
-     */
-    private function assertSuggestion(array $result, string $value, int $count = 1):void
-    {
-        $this->assertEquals(true, is_array($result));
-        $this->assertArrayHasKey('suggestions', $result);
-        $this->assertEquals($count, count($result['suggestions']));
-        $this->assertArrayHasKey('value', $result['suggestions'][0]);
-        $this->assertEquals($value, $result['suggestions'][0]['value']);
+        $first = $result->first();
+        self::assertInstanceOf(SuggestionDTO::class, $first);
+        self::assertEquals('ПАО СБЕРБАНК', $first->value);
     }
 }

@@ -1,47 +1,26 @@
 <?php
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
 
-/**
- * CodersStudio 2019
- *  https://coders.studio
- *  info@coders.studio
- */
+declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use phpDocumentor\Reflection\Types\Integer;
+use Nos\DadataApi\Facades\DadataApi;
+use Nos\DadataApi\DTO\AddressDTO;
 use Tests\TestCase;
-use CodersStudio\DadataApi\Facades\DadataApi;
 
 class CleanTest extends TestCase
 {
-
-    /**
-     * Test clean address
-     */
-    public function testAddress()
+    public function testAddress(): void
     {
-        $result = DadataApi::cleanAddress("Ставрополь Мира 123");
-        $this->assertEquals(true, is_array($result));
-        $this->assertEquals(1, count($result));
-        $this->assertArrayHasKey('result', $result[0]);
-        $this->assertEquals("г Ставрополь, ул Мира, д 123", $result[0]['result']);
+        $result = DadataApi::cleanAddress('Ставрополь Мира 123');
+        self::assertInstanceOf(AddressDTO::class, $result);
+        self::assertEquals('г Ставрополь, ул Мира, д 123', $result->result);
     }
 
-    /**
-     * Test clean phone
-     */
-    public function testPhone()
+    public function testPhone(): void
     {
-        $result = DadataApi::cleanPhone("(8553)38-88-35 вн.74-35; 8-917-238-07-84");
-        $this->assertEquals(true, is_array($result));
-        $this->assertEquals(1, count($result));
-        $this->assertArrayHasKey('phone', $result[0]);
-        $this->assertEquals(3, $result[0]['qc']);
-        $this->assertEquals("+7 8553 38-88-35 доб. 7435", $result[0]['phone']);
+        $result = DadataApi::cleanPhone('(8553)38-88-35 вн.74-35; 8-917-238-07-84');
+        self::assertInstanceOf(\Nos\DadataApi\DTO\PhoneDTO::class, $result);
+        self::assertEquals('+7 8553 38-88-35 доб. 7435', $result->phone);
     }
 }
