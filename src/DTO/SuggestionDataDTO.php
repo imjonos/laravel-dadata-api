@@ -117,6 +117,46 @@ final readonly class SuggestionDataDTO implements DtoInterface
 
     public static function fromArray(array $data): self
     {
+        // Извлекаем строковые значения из вложенных объектов
+        $name = is_array($data['name'] ?? null)
+            ? ($data['name']['short_with_opf'] ?? $data['name']['full_with_opf'] ?? null)
+            : ($data['name'] ?? null);
+
+        $fullName = is_array($data['name'] ?? null)
+            ? ($data['name']['full_with_opf'] ?? $data['name']['full'] ?? null)
+            : ($data['full_name'] ?? null);
+
+        $shortName = is_array($data['name'] ?? null)
+            ? ($data['name']['short_with_opf'] ?? $data['name']['short'] ?? null)
+            : ($data['short_name'] ?? null);
+
+        $opf = is_array($data['opf'] ?? null)
+            ? ($data['opf']['short'] ?? $data['opf']['full'] ?? null)
+            : ($data['opf'] ?? null);
+
+        $opfShort = is_array($data['opf'] ?? null)
+            ? ($data['opf']['short'] ?? null)
+            : ($data['opf_short'] ?? null);
+
+        $state = is_array($data['state'] ?? null)
+            ? ($data['state']['status'] ?? null)
+            : ($data['state'] ?? null);
+
+        $stateStatus = is_array($data['state'] ?? null)
+            ? ($data['state']['status'] ?? null)
+            : ($data['state_status'] ?? null);
+
+        $stateActualityDate = is_array($data['state'] ?? null)
+            ? (isset($data['state']['actuality_date']) ? (string)$data['state']['actuality_date'] : null)
+            : ($data['state_actuality_date'] ?? null);
+
+        $address = is_array($data['address'] ?? null)
+            ? ($data['address']['value'] ?? $data['address']['unrestricted_value'] ?? null)
+            : ($data['address'] ?? null);
+
+        // Приведение типов для числовых полей
+        $ogrnDate = isset($data['ogrn_date']) ? (string)$data['ogrn_date'] : null;
+
         return new self(
             kladrId: $data['kladr_id'] ?? '',
             fiasId: $data['fias_id'] ?? '',
@@ -125,7 +165,7 @@ final readonly class SuggestionDataDTO implements DtoInterface
             fiasPath: $data['fias_path'] ?? '',
             fiasBlanked: $data['fias_blanked'] ?? '',
             addressType: $data['address_type'] ?? null,
-            address: $data['address'] ?? null,
+            address: $address,
             source: $data['source'] ?? null,
             result: $data['result'] ?? null,
             postalCode: $data['postal_code'] ?? null,
@@ -187,19 +227,19 @@ final readonly class SuggestionDataDTO implements DtoInterface
             boxberryId: $data['boxberry_id'] ?? null,
             cdekId: $data['cdek_id'] ?? null,
             dpdId: $data['dpd_id'] ?? null,
-            name: $data['name'] ?? null,
-            fullName: $data['full_name'] ?? null,
-            shortName: $data['short_name'] ?? null,
+            name: $name,
+            fullName: $fullName,
+            shortName: $shortName,
             inn: $data['inn'] ?? null,
             kpp: $data['kpp'] ?? null,
             ogrn: $data['ogrn'] ?? null,
-            ogrnDate: $data['ogrn_date'] ?? null,
-            opf: $data['opf'] ?? null,
-            opfShort: $data['opf_short'] ?? null,
+            ogrnDate: $ogrnDate,
+            opf: $opf,
+            opfShort: $opfShort,
             addressWord: $data['address_word'] ?? null,
-            state: $data['state'] ?? null,
-            stateStatus: $data['state_status'] ?? null,
-            stateActualityDate: $data['state_actuality_date'] ?? null,
+            state: $state,
+            stateStatus: $stateStatus,
+            stateActualityDate: $stateActualityDate,
             bankBic: $data['bik'] ?? null,
             swift: $data['swift'] ?? null,
             okato: $data['okato'] ?? null,

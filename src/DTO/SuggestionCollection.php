@@ -8,7 +8,7 @@ use Nos\BaseDto\DTOCollection;
 
 final class SuggestionCollection extends DTOCollection
 {
-    protected function createDTO(array $array): SuggestionDTO
+    protected static function createDTO(array $array): SuggestionDTO
     {
         return SuggestionDTO::fromArray($array);
     }
