@@ -76,8 +76,9 @@ $collection = DadataApi::suggestCompany('7707083893');
 $company = $collection->first();
 
 echo $company->value; // Company name
-echo $company->data->inn;
-echo $company->data->ogrn;
+echo $company->inn;
+echo $company->ogrn;
+echo $company->okpo;
 ```
 
 ### Bank Search
@@ -134,7 +135,7 @@ echo $delivery->data->dpdId;
 
 ## Available Methods
 
-All suggestion methods return `SuggestionCollection`:
+Address-like autocomplete methods return `AddressSuggestionCollection`, and company search returns `CompanySuggestionCollection`:
 
 | Method | Parameters | Description |
 |--------|------------|-------------|
@@ -155,7 +156,7 @@ Clean methods return DTO objects:
 | `cleanAddress` | `$address` | `AddressDTO` |
 | `cleanPhone` | `$phone` | `PhoneDTO` |
 
-## DTO Classes
+## Autocomplete DTOs
 
 ### AddressDTO
 
@@ -188,19 +189,45 @@ $phone->timezone;
 $phone->qc; // Quality code
 ```
 
-### SuggestionDTO
+### AddressSuggestionDTO
 
-Represents suggestion from search methods:
+Represents one address autocomplete item. All fields are exposed directly on the DTO:
 
 ```php
 $suggestion->value; // Display value
 $suggestion->unrestrictedValue; // Full value
-$suggestion->data; // SuggestionDataDTO
+$suggestion->street; // Street name
+$suggestion->city; // City
+$suggestion->fiasId; // FIAS ID
 ```
 
-### SuggestionCollection
+### CompanySuggestionDTO
 
-Collection of suggestions with utility methods:
+Represents one company autocomplete item. All fields are exposed directly on the DTO:
+
+```php
+$company->value;
+$company->unrestrictedValue;
+$company->inn;
+$company->ogrn;
+$company->okpo;
+```
+
+### AddressSuggestionCollection
+
+Collection of address-like suggestions with utility methods:
+
+```php
+$collection->count();
+$collection->first();
+$collection->map(fn($item) => ...);
+$collection->filter(fn($item) => ...);
+$collection->each(fn($item) => ...);
+```
+
+### CompanySuggestionCollection
+
+Collection of company suggestions with the same utility methods:
 
 ```php
 $collection->count();

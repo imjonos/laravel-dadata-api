@@ -8,14 +8,15 @@ use Nos\DadataApi\Classes\Clean;
 use Nos\DadataApi\Classes\Suggestions;
 use Nos\DadataApi\DTO\AddressDTO;
 use Nos\DadataApi\DTO\PhoneDTO;
-use Nos\DadataApi\DTO\SuggestionCollection;
+use Nos\DadataApi\DTO\AddressSuggestionCollection;
+use Nos\DadataApi\DTO\CompanySuggestionCollection;
 
 final class DadataApi
 {
     private ?Suggestions $suggest = null;
     private ?Clean $clean = null;
 
-    public function suggestCity(string $query = '', array $countryCodeISO = ['*'], int $count = 10): SuggestionCollection
+    public function suggestCity(string $query = '', array $countryCodeISO = ['*'], int $count = 10): AddressSuggestionCollection
     {
         $countries = array_map(
             static fn(string $item): array => ['country_iso_code' => $item],
@@ -30,10 +31,10 @@ final class DadataApi
             'count' => $count,
         ];
         $result = $this->getSuggest()->suggest('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestStreet(string $query = '', string $fiasId = '', int $count = 10): SuggestionCollection
+    public function suggestStreet(string $query = '', string $fiasId = '', int $count = 10): AddressSuggestionCollection
     {
         $data = [
             'query' => $query,
@@ -46,10 +47,10 @@ final class DadataApi
             'count' => $count,
         ];
         $result = $this->getSuggest()->suggest('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestHouse(string $query = '', string $streetFiasId = '', int $count = 10): SuggestionCollection
+    public function suggestHouse(string $query = '', string $streetFiasId = '', int $count = 10): AddressSuggestionCollection
     {
         $data = [
             'query' => $query,
@@ -59,7 +60,7 @@ final class DadataApi
             'count' => $count,
         ];
         $result = $this->getSuggest()->suggest('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
     public function cleanAddress(string $address): AddressDTO
@@ -80,7 +81,7 @@ final class DadataApi
         return PhoneDTO::fromArray($result[0]);
     }
 
-    public function suggestCountry(string $query, int $count = 10): SuggestionCollection
+    public function suggestCountry(string $query, int $count = 10): AddressSuggestionCollection
     {
         $data = [
             'query' => $query,
@@ -92,10 +93,10 @@ final class DadataApi
             'count' => $count,
         ];
         $result = $this->getSuggest()->suggest('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestAddress(string $query, ?string $fiasId = null): SuggestionCollection
+    public function suggestAddress(string $query, ?string $fiasId = null): AddressSuggestionCollection
     {
         $data = [
             'query' => $query,
@@ -107,51 +108,59 @@ final class DadataApi
             ];
         }
         $result = $this->getSuggest()->suggest('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestBank(string $query): SuggestionCollection
+    public function suggestBank(string $query): AddressSuggestionCollection
     {
         $data = [
             'query' => $query,
         ];
         $result = $this->getSuggest()->suggest('bank', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestDeliveryId(string $kladrId): SuggestionCollection
+    public function suggestDeliveryId(string $kladrId): AddressSuggestionCollection
     {
         $data = [
             'query' => $kladrId,
         ];
         $result = $this->getSuggest()->findById('delivery', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestAddressById(string $fiasId): SuggestionCollection
+    public function suggestAddressById(string $fiasId): AddressSuggestionCollection
     {
         $data = [
             'query' => $fiasId,
         ];
         $result = $this->getSuggest()->findById('address', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToAddressSuggestionCollection($result);
     }
 
-    public function suggestCompany(string $inn): SuggestionCollection
+    public function suggestCompany(string $inn): CompanySuggestionCollection
     {
         $data = [
             'query' => $inn,
         ];
         $result = $this->getSuggest()->findById('party', $data);
-        return $this->mapToSuggestionCollection($result);
+        return $this->mapToCompanySuggestionCollection($result);
     }
 
-    private function mapToSuggestionCollection(?array $result): SuggestionCollection
+    private function mapToAddressSuggestionCollection(?array $result): AddressSuggestionCollection
     {
         if ($result === null || !isset($result['suggestions'])) {
-            return new SuggestionCollection();
+            return new AddressSuggestionCollection();
         }
-        return SuggestionCollection::fromArray($result['suggestions']);
+        return AddressSuggestionCollection::fromArray($result['suggestions']);
+    }
+
+    private function mapToCompanySuggestionCollection(?array $result): CompanySuggestionCollection
+    {
+        if ($result === null || !isset($result['suggestions'])) {
+            return new CompanySuggestionCollection();
+        }
+        return CompanySuggestionCollection::fromArray($result['suggestions']);
     }
 
     private function getSuggest(): Suggestions
