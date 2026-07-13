@@ -132,7 +132,7 @@ final readonly class AddressDTO implements DtoInterface
 
         return new self(
             source: $data['source'] ?? '',
-            result: $data['result'] ?? '',
+            result: $data['result'] ?? $data['unrestricted_value'] ?? $data['value'] ?? '',
             postalCode: $data['postal_code'] ?? null,
             country: $data['country'] ?? '',
             countryIsoCode: $data['country_iso_code'] ?? '',
