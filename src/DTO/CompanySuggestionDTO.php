@@ -47,6 +47,7 @@ final readonly class CompanySuggestionDTO implements DtoInterface
         public ?AddressDTO $address,
         public ?array $phones,
         public ?array $emails,
+        public ?CompanyLicenseCollection $licenses,
         public ?array $documents,
         public ?array $authorities,
         public ?array $financeHistory,
@@ -79,6 +80,11 @@ final readonly class CompanySuggestionDTO implements DtoInterface
                 static fn(array $item): CompanyEmailDTO => CompanyEmailDTO::fromArray($item),
                 $payload['emails']
             );
+        }
+
+        $licenses = null;
+        if (isset($payload['licenses']) && is_array($payload['licenses'])) {
+            $licenses = CompanyLicenseCollection::fromArray($payload['licenses']);
         }
 
         $documents = isset($payload['documents']) && is_array($payload['documents']) ? $payload['documents'] : null;
@@ -130,6 +136,7 @@ final readonly class CompanySuggestionDTO implements DtoInterface
                 : null,
             phones: $phones,
             emails: $emails,
+            licenses: $licenses,
             documents: $documents,
             authorities: $authorities,
             financeHistory: $financeHistory,
