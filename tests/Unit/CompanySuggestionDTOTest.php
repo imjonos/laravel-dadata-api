@@ -32,8 +32,9 @@ class CompanySuggestionDTOTest extends TestCase
             ],
         ]);
 
-        self::assertInstanceOf(CompanyLicenseCollection::class, $dto->licenses);
-        $license = $dto->licenses->first();
+        $licenses = $dto->licenses;
+        self::assertInstanceOf(CompanyLicenseCollection::class, $licenses);
+        $license = $licenses->findByKey(0);
         self::assertInstanceOf(CompanyLicenseDTO::class, $license);
         self::assertSame('АБ', $license->series);
         self::assertSame('123456', $license->number);

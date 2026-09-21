@@ -32,7 +32,7 @@ final class Suggestions
     }
 
     /**
-     * @param array<string, string> $fields
+     * @param array<string, mixed> $fields
      * @return array<string, mixed>
      */
     public function findById(string $type, array $fields): array

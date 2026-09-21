@@ -140,11 +140,21 @@ final class DadataApi
 
     public function suggestCompany(string $inn): CompanySuggestionCollection
     {
-        $data = [
-            'query' => $inn,
-        ];
+        $data = $this->buildCompanySearchFields($inn);
         $result = $this->getSuggest()->findById('party', $data);
         return $this->mapToCompanySuggestionCollection($result);
+    }
+
+    /**
+     * @return array<string, int|string>
+     */
+    private function buildCompanySearchFields(string $inn): array
+    {
+        return [
+            'query' => $inn,
+            'count' => 1,
+            'branch_type' => 'MAIN',
+        ];
     }
 
     private function mapToAddressSuggestionCollection(?array $result): AddressSuggestionCollection
