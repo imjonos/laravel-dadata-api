@@ -47,4 +47,42 @@ class CompanySuggestionDTOTest extends TestCase
         self::assertSame([['name' => 'Деятельность']], $license->activities);
         self::assertSame([['value' => 'г. Москва']], $license->addresses);
     }
+
+    public function testItIncludesDadataLicensesWhenSuggestionIsJsonEncoded(): void
+    {
+        $dto = CompanySuggestionDTO::fromArray([
+            'value' => 'ПАО СБЕРБАНК',
+            'unrestricted_value' => 'ПАО СБЕРБАНК',
+            'data' => [
+                'inn' => '7707083893',
+                'licenses' => [[
+                    'series' => null,
+                    'number' => '045-02894-100000',
+                    'issue_date' => 975283200000,
+                    'issue_authority' => 'Центральный банк Российской Федерации',
+                    'suspend_date' => null,
+                    'suspend_authority' => null,
+                    'valid_from' => 1444089600000,
+                    'valid_to' => null,
+                    'activities' => ['Брокерская деятельность'],
+                    'addresses' => null,
+                ]],
+            ],
+        ]);
+
+        $serialized = json_decode(
+            json_encode($dto, JSON_THROW_ON_ERROR),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        self::assertSame('7707083893', $serialized['inn']);
+        self::assertCount(1, $serialized['licenses']);
+        self::assertSame('045-02894-100000', $serialized['licenses'][0]['number']);
+        self::assertSame(['Брокерская деятельность'], $serialized['licenses'][0]['activities']);
+
+        $array = $dto->toArray();
+        self::assertSame('045-02894-100000', $array['licenses'][0]['number']);
+    }
 }

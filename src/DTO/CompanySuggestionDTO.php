@@ -9,7 +9,9 @@ use Nos\BaseDto\Traits\DataTransforms\ArrayDataTransformable;
 
 final readonly class CompanySuggestionDTO implements DtoInterface
 {
-    use ArrayDataTransformable;
+    use ArrayDataTransformable {
+        toArray as private transformToArray;
+    }
 
     /**
      * @param array<int, CompanyOkvedDTO>|null $okveds
@@ -142,5 +144,13 @@ final readonly class CompanySuggestionDTO implements DtoInterface
             financeHistory: $financeHistory,
             employeeCount: isset($payload['employee_count']) ? (int) $payload['employee_count'] : null,
         );
+    }
+
+    public function toArray(): array
+    {
+        $data = $this->transformToArray();
+        $data['licenses'] = $this->licenses?->jsonSerialize();
+
+        return $data;
     }
 }

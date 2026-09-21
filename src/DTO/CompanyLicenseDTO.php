@@ -12,7 +12,7 @@ final readonly class CompanyLicenseDTO implements DtoInterface
     use ArrayDataTransformable;
 
     /**
-     * @param array<int, array<string, mixed>>|null $activities
+     * @param array<int, string|array<string, mixed>>|null $activities
      * @param array<int, array<string, mixed>>|null $addresses
      */
     private function __construct(
