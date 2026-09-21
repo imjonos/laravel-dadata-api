@@ -152,8 +152,6 @@ final class DadataApi
     {
         return [
             'query' => $inn,
-            'count' => 1,
-            'branch_type' => 'MAIN',
         ];
     }
 
