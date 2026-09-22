@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Nos\DadataApi\Classes;
 
+use Nos\DadataApi\Enums\CleanType;
+
 final class Clean
 {
     private const BASE_URL = 'https://dadata.ru/api/v2/clean';
@@ -37,9 +39,9 @@ final class Clean
     /**
      * @return array<string, mixed>
      */
-    public function clean(string $type, string $value): array
+    public function clean(CleanType $type, string $value): array
     {
-        $url = self::BASE_URL . "/$type";
+        $url = self::BASE_URL . '/' . $type->value;
         $fields = [$value];
         return $this->executeRequest($url, $fields);
     }

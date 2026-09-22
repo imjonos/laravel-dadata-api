@@ -6,9 +6,9 @@ namespace Nos\DadataApi\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Nos\DadataApi\DTO\AddressDTO;
-use Nos\DadataApi\DTO\PhoneDTO;
 use Nos\DadataApi\DTO\AddressSuggestionCollection;
 use Nos\DadataApi\DTO\CompanySuggestionCollection;
+use Nos\DadataApi\DTO\PhoneDTO;
 
 /**
  * @method static AddressSuggestionCollection suggestCity(string $query = '', array $countryCodeISO = ['*'], int $count = 10)

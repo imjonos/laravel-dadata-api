@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Nos\DadataApi\Classes;
 
+use Nos\DadataApi\Enums\SuggestType;
+
 final class Suggestions
 {
     private const BASE_URL = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs';
@@ -35,9 +37,9 @@ final class Suggestions
      * @param array<string, mixed> $fields
      * @return array<string, mixed>
      */
-    public function findById(string $type, array $fields): array
+    public function findById(SuggestType $type, array $fields): array
     {
-        $url = self::BASE_URL . "/findById/$type";
+        $url = self::BASE_URL . '/findById/' . $type->value;
         return $this->executeRequest($url, $fields);
     }
 
@@ -69,9 +71,9 @@ final class Suggestions
      * @param array<string, mixed> $fields
      * @return array<string, mixed>
      */
-    public function suggest(string $type, array $fields): array
+    public function suggest(SuggestType $type, array $fields): array
     {
-        $url = self::BASE_URL . "/suggest/$type";
+        $url = self::BASE_URL . '/suggest/' . $type->value;
         return $this->executeRequest($url, $fields);
     }
 

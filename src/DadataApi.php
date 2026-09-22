@@ -7,9 +7,12 @@ namespace Nos\DadataApi;
 use Nos\DadataApi\Classes\Clean;
 use Nos\DadataApi\Classes\Suggestions;
 use Nos\DadataApi\DTO\AddressDTO;
-use Nos\DadataApi\DTO\PhoneDTO;
 use Nos\DadataApi\DTO\AddressSuggestionCollection;
 use Nos\DadataApi\DTO\CompanySuggestionCollection;
+use Nos\DadataApi\DTO\PhoneDTO;
+use Nos\DadataApi\Enums\AddressBound;
+use Nos\DadataApi\Enums\CleanType;
+use Nos\DadataApi\Enums\SuggestType;
 
 final class DadataApi
 {
@@ -25,12 +28,12 @@ final class DadataApi
 
         $data = [
             'query' => $query,
-            'from_bound' => ['value' => 'city'],
-            'to_bound' => ['value' => 'settlement'],
+            'from_bound' => ['value' => AddressBound::CITY->value],
+            'to_bound' => ['value' => AddressBound::SETTLEMENT->value],
             'locations' => $countries,
             'count' => $count,
         ];
-        $result = $this->getSuggest()->suggest('address', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -38,15 +41,15 @@ final class DadataApi
     {
         $data = [
             'query' => $query,
-            'from_bound' => ['value' => 'street'],
-            'to_bound' => ['value' => 'street'],
+            'from_bound' => ['value' => AddressBound::STREET->value],
+            'to_bound' => ['value' => AddressBound::STREET->value],
             'locations' => [
                 ['city_fias_id' => $fiasId],
                 ['settlement_fias_id' => $fiasId],
             ],
             'count' => $count,
         ];
-        $result = $this->getSuggest()->suggest('address', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -54,18 +57,18 @@ final class DadataApi
     {
         $data = [
             'query' => $query,
-            'from_bound' => ['value' => 'house'],
-            'to_bound' => ['value' => 'house'],
+            'from_bound' => ['value' => AddressBound::HOUSE->value],
+            'to_bound' => ['value' => AddressBound::HOUSE->value],
             'locations' => [['street_fias_id' => $streetFiasId]],
             'count' => $count,
         ];
-        $result = $this->getSuggest()->suggest('address', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
     public function cleanAddress(string $address): AddressDTO
     {
-        $result = $this->getClean()->clean('address', $address);
+        $result = $this->getClean()->clean(CleanType::ADDRESS, $address);
         if (empty($result)) {
             throw new \RuntimeException('Address cleaning returned empty result');
         }
@@ -74,7 +77,7 @@ final class DadataApi
 
     public function cleanPhone(string $phone): PhoneDTO
     {
-        $result = $this->getClean()->clean('phone', $phone);
+        $result = $this->getClean()->clean(CleanType::PHONE, $phone);
         if (empty($result)) {
             throw new \RuntimeException('Phone cleaning returned empty result');
         }
@@ -85,14 +88,14 @@ final class DadataApi
     {
         $data = [
             'query' => $query,
-            'from_bound' => ['value' => 'country'],
-            'to_bound' => ['value' => 'country'],
+            'from_bound' => ['value' => AddressBound::COUNTRY->value],
+            'to_bound' => ['value' => AddressBound::COUNTRY->value],
             'locations' => [
                 ['country_iso_code' => '*'],
             ],
             'count' => $count,
         ];
-        $result = $this->getSuggest()->suggest('address', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -107,7 +110,7 @@ final class DadataApi
                 ['settlement_fias_id' => $fiasId],
             ];
         }
-        $result = $this->getSuggest()->suggest('address', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -116,7 +119,7 @@ final class DadataApi
         $data = [
             'query' => $query,
         ];
-        $result = $this->getSuggest()->suggest('bank', $data);
+        $result = $this->getSuggest()->suggest(SuggestType::BANK, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -125,7 +128,7 @@ final class DadataApi
         $data = [
             'query' => $kladrId,
         ];
-        $result = $this->getSuggest()->findById('delivery', $data);
+        $result = $this->getSuggest()->findById(SuggestType::DELIVERY, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
@@ -134,14 +137,14 @@ final class DadataApi
         $data = [
             'query' => $fiasId,
         ];
-        $result = $this->getSuggest()->findById('address', $data);
+        $result = $this->getSuggest()->findById(SuggestType::ADDRESS, $data);
         return $this->mapToAddressSuggestionCollection($result);
     }
 
     public function suggestCompany(string $inn): CompanySuggestionCollection
     {
         $data = $this->buildCompanySearchFields($inn);
-        $result = $this->getSuggest()->findById('party', $data);
+        $result = $this->getSuggest()->findById(SuggestType::PARTY, $data);
         return $this->mapToCompanySuggestionCollection($result);
     }
 
